@@ -1,7 +1,7 @@
 #include "transformmatrix4x4.h"
 #include <cmath>
 #include<math.h>
-TransformMatrix4x4::TransformMatrix4x4()
+TransformMatrix4x4::TransformMatrix4x4(): m_matrix{4,4}
 {
     rotation.x = 0;
     rotation.y = 0;
@@ -21,67 +21,80 @@ void TransformMatrix4x4::setRotation(float x,float y,float z){
     rotation.y=y;
     rotation.z=z;
 
+    m_matrix =apply_matrix();
 }
 
 void TransformMatrix4x4::setTranslation(float x,float y,float z){
     translation.x=x;
     translation.y=y;
     translation.z=z;
+
+    m_matrix =apply_matrix();
 }
 
 
 void TransformMatrix4x4::setScale(float x,float y,float z){
     scale.x=x;
     scale.y=y;
-    scale.z=z;   
+    scale.z=z;
+    m_matrix =apply_matrix();
 }
-const Matrix TransformMatrix4x4::data(){
-    Matrix a(4,4);
+
+
+
+
+Matrix TransformMatrix4x4::apply_matrix()
+{
+    Matrix _translate(4,4),_rotate(4,4),_scale(4,4);
 
     for(int i  =0; i<a.getRows();i++){
-        a(i,i) = 1;
+        _translate(i,i) = 1;
+        _rotate(i,i) = 1;
+        _scale(i,i)=1;
     }
     /////////////////////////
     //    Translation      //
     /////////////////////////
-    
-    a(3,0) = translation.x;
-    a(3,1) = translation.y;
-    a(3,2) = translation.z;
+
+    _translate(3,0) = translation.x;
+    _translate(3,1) = translation.y;
+    _translate(3,2) = translation.z;
 
     /////////////////////////
     //        Scale        //
     /////////////////////////
 
-    a(0,0) = scale.x;
-    a(1,1) = scale.y;
-    a(2,2) = scale.z;
+    _scale(0,0) = scale.x;
+    _scale(1,1) = scale.y;
+    _scale(2,2) = scale.z;
 
     /////////////////////////
     //      Rotation       //
     /////////////////////////
 
-    a(0,0) *= cos(rotation.y)*cos(rotation.z);
-    a(0,1) *= cos(rotation.y)*cos(rotation.z);
-    a(0,2) *= -sin(rotation.y);
+    _rotate(0,0) = cos(rotation.y)*cos(rotation.z);
+    _rotate(0,1) = cos(rotation.y)*cos(rotation.z);
+    _rotate(0,2) = -sin(rotation.y);
 
 
-    a(1,0) *= sin(rotation.x)*sin(rotation.y)*sin(rotation.z)
-            - cos(rotation.x)*cos(rotation.z);
-    
-    a(1,1) *= sin(rotation.x)*sin(rotation.y)*sin(rotation.z)
-            + cos(rotation.x)*cos(rotation.z);
+    _rotate(1,0) = sin(rotation.x)*sin(rotation.y)*sin(rotation.z)
+                    - cos(rotation.x)*cos(rotation.z);
 
-    a(1,2) *= cos(rotation.y)*sin(rotation.z);
+    _rotate(1,1) = sin(rotation.x)*sin(rotation.y)*sin(rotation.z)
+                    + cos(rotation.x)*cos(rotation.z);
 
-    a(2,0) *= cos(rotation.x)*sin(rotation.y)*cos(rotation.z)
-            + sin(rotation.x)*sin(rotation.z);
+    _rotate(1,2) = cos(rotation.y)*sin(rotation.z);
 
-    a(2,1) *= sin(rotation.x)*sin(rotation.y)*cos(rotation.z)
-            - cos(rotation.x)*sin(rotation.z);
+    _rotate(2,0) = cos(rotation.x)*sin(rotation.y)*cos(rotation.z)
+                    + sin(rotation.x)*sin(rotation.z);
 
-    a(2,2) *= cos(rotation.y)*cos(rotation.z);
+    _rotate(2,1) = sin(rotation.x)*sin(rotation.y)*cos(rotation.z)
+                    - cos(rotation.x)*sin(rotation.z);
 
-    return a;
+    _rotate(2,2) = cos(rotation.y)*cos(rotation.z);
+    return _rotate*_translate*_scale;
+}
+float* TransformMatrix4x4::data(){
+    return m_matrix.data();
     
 }

@@ -26,6 +26,11 @@ if(${QT_VERSION_MAJOR} GREATER_EQUAL 6)
         service/openglcore.h service/openglcore.cpp
         service/transformmatrix4x4.h service/transformmatrix4x4.cpp
         service/matrix/matrix.cpp service/matrix/matrix.hpp
+        service/Mesh/mesh.h service/Mesh/mesh.cpp
+        service/Mesh/Primitives.h
+        service/settings.h service/settings.cpp
+        service/Scene/scene.h service/Scene/scene.cpp
+        service/Scene/entity.h service/Scene/entity.cpp
     )
 # Define target properties for Android with Qt 6 as:
 #    set_property(TARGET simple-3d-viewer APPEND PROPERTY QT_ANDROID_PACKAGE_SOURCE_DIR

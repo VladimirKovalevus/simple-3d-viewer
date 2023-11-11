@@ -1,5 +1,6 @@
 #include "openglcore.h"
-
+#include <iostream>
+#include"settings.h"
 OpenGLCore::OpenGLCore(QWidget *parent)
     : QOpenGLWidget{parent}
 {
@@ -50,34 +51,22 @@ void OpenGLCore::initModel(QString path)
 {
     makeCurrent();
     cleanUp();
-    if(parser((char*)path.toStdString().c_str(),model)!=OK){
-        Status s;
-        s.edges=0;
-        s.facets=0;
-        s.vertexes=0;
-        return  s;
-    }
-    std::vector<vertex_t> vertices;
-    for(int i =0; i <model->index_array.facet_length;i++){
-        unsigned int a = model->index_array.facet[i];
-        vertices.push_back(model->vertex_array.vertex[a]);
 
-    }
-    glGenVertexArrays(1, &VAO);
-    glGenBuffers(1, &VBO);
-    glGenBuffers(1, &EBO);
-    glBindVertexArray(VAO);
-    glBindBuffer(GL_ARRAY_BUFFER, VBO);
-    glBufferData(GL_ARRAY_BUFFER, model->vertex_array.vertex_length*sizeof(vertex_t), model->vertex_array.vertex, GL_STATIC_DRAW);
+//    glGenVertexArrays(1, &VAO);
+//    glGenBuffers(1, &VBO);
+//    glGenBuffers(1, &EBO);
+//    glBindVertexArray(VAO);
+//    glBindBuffer(GL_ARRAY_BUFFER, VBO);
+//    glBufferData(GL_ARRAY_BUFFER, model->vertex_array.vertex_length*sizeof(vertex_t), model->vertex_array.vertex, GL_STATIC_DRAW);
 
-    glBindBuffer(GL_ELEMENT_ARRAY_BUFFER, EBO);
-    glBufferData(GL_ELEMENT_ARRAY_BUFFER, model->index_array.facet_length*4, model->index_array.facet, GL_STATIC_DRAW);
+//    glBindBuffer(GL_ELEMENT_ARRAY_BUFFER, EBO);
+//    glBufferData(GL_ELEMENT_ARRAY_BUFFER, model->index_array.facet_length*4, model->index_array.facet, GL_STATIC_DRAW);
 
-    glEnableVertexAttribArray(0);
-    glVertexAttribPointer(0, 3, GL_FLOAT, GL_FALSE, 3 * sizeof(float), (void*)0);
-    glBindBuffer(GL_ARRAY_BUFFER, 0);
+//    glEnableVertexAttribArray(0);
+//    glVertexAttribPointer(0, 3, GL_FLOAT, GL_FALSE, 3 * sizeof(float), (void*)0);
+//    glBindBuffer(GL_ARRAY_BUFFER, 0);
 
-    glBindVertexArray(0);
+//    glBindVertexArray(0);
     doneCurrent();
 }
 
@@ -128,7 +117,22 @@ void OpenGLCore::paintGL()
         update();
     }
 }
+void OpenGLCore::resizeGL(int w, int h)
+{
+    glViewport(0, 0, w, h);
+}
 
+void OpenGLCore::initializeGL()
+{
+    initializeOpenGLFunctions();
+    glClearColor((float)settings->color_background[0]/255.f
+                 ,(float)settings->color_background[1]/255.f
+                 ,(float)settings->color_background[2]/255.f, 1.f);
+    glEnable(GL_DEPTH_TEST);
+    glEnable(GL_CULL_FACE);
+
+    initShaders();
+}
 
 void OpenGLCore::drawLines(){
     glPolygonMode(GL_FRONT_AND_BACK, GL_LINE);

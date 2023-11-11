@@ -11,11 +11,17 @@ class OpenGLCore : public QOpenGLWidget, protected QOpenGLFunctions_3_3_Core
 public:
     explicit OpenGLCore(QWidget *parent = nullptr);
 
+    void initModel(QString path);
+
+protected:
+    void initializeGL() override;
+    void resizeGL(int w, int h) override;
+    void paintGL() override;
 
 
 private:
 
-    void cleanUp();
+    void cleanUp(){};
     void initShaders();
     void drawLines();
     void drawPoints();
