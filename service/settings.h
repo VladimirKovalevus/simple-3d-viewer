@@ -23,9 +23,6 @@ class Settings
 public:
     static Settings& getInstance();
 
-
-
-
 private:
     Settings();
 

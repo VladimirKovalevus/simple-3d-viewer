@@ -47,7 +47,7 @@ Matrix TransformMatrix4x4::apply_matrix()
 {
     Matrix _translate(4,4),_rotate(4,4),_scale(4,4);
 
-    for(int i  =0; i<a.getRows();i++){
+    for(int i  =0; i<4;i++){
         _translate(i,i) = 1;
         _rotate(i,i) = 1;
         _scale(i,i)=1;

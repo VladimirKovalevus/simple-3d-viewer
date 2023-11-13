@@ -16,7 +16,7 @@ public:
     void setTranslation(float x ,float y,float z);
     void setScale(float x ,float y,float z);
     
-    const float *data();
+    float *data();
 
 private:
 

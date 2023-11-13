@@ -5,19 +5,21 @@
 
 #include "Primitives.h"
 #include "../transformmatrix4x4.h"
+#include "../Scene/entity.h"
+#include <QtOpenGL/QOpenGLFunctions_3_3_Core>
 
 
 
-
-
-class Mesh
+class Mesh: public Entity , public QOpenGLFunctions_3_3_Core
 {
 public:
     Mesh();
+    void Draw();
 private:
     std::vector<Vertex> verticies;
     std::vector<unsigned int> indicies;
-    TransformMatrix4x4 transformation;
+
+    unsigned int VAO;
 };
 
 #endif // MESH_H
