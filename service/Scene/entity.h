@@ -9,11 +9,12 @@
 class Entity
 {
 public:
+    virtual void Draw();
     virtual void addChildren(Entity* e)=0;
+
 protected:
     TransformMatrix4x4 m_transform;
     std::vector<Entity*> m_children;
-    Entity* m_parent;
 };
 
 #endif // ENTITY_H

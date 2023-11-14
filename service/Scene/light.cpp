@@ -2,7 +2,7 @@
 
 Light::Light()
 {
-    color.x=1;
-    color.y=1;
-    color.z=1;
+    color.r=1;
+    color.g=1;
+    color.b=1;
 }

@@ -21,7 +21,7 @@ protected:
 
 private:
 
-    void cleanUp(){};
+
     void initShaders();
     void drawLines();
     void drawPoints();

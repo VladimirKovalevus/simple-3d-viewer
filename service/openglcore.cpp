@@ -113,7 +113,6 @@ void OpenGLCore::paintGL()
             drawPoints();
         }
         drawLines();
-
         update();
     }
 }
