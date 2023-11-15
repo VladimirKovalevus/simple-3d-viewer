@@ -19,6 +19,7 @@ public:
     float *data();
 
 private:
+    Matrix apply_matrix();
     Matrix m_matrix;
     Vec3 rotation;
     Vec3 scale;

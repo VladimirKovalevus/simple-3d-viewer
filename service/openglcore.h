@@ -4,6 +4,7 @@
 #include <QObject>
 #include <QtOpenGLWidgets/QOpenGLWidget>
 #include <QtOpenGL/QOpenGLFunctions_3_3_Core>
+#include "Scene/entity.h"
 
 class OpenGLCore : public QOpenGLWidget, protected QOpenGLFunctions_3_3_Core
 {
@@ -26,10 +27,7 @@ private:
     void drawLines();
     void drawPoints();
 
-
-    unsigned int VAO=0;
-    unsigned int VBO=0;
-    unsigned int EBO=0;
+    Entity *scene;
     unsigned int vertexShader=0;
     unsigned int fragmentShader=0;
     unsigned int shaderProgram=0;

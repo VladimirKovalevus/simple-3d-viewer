@@ -92,9 +92,8 @@ Matrix TransformMatrix4x4::apply_matrix()
                     - cos(rotation.x)*sin(rotation.z);
 
     _rotate(2,2) = cos(rotation.y)*cos(rotation.z);
-    return _rotate*_translate*_scale;
+    return _translate*_rotate*_scale;
 }
 float* TransformMatrix4x4::data(){
-    return m_matrix.data();
-    
+    return m_matrix.data();   
 }

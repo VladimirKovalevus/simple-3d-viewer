@@ -10,7 +10,7 @@ class Entity
 {
 public:
     virtual void Draw();
-    virtual void addChildren(Entity* e)=0;
+    virtual void addChildren(Entity* e);
 
 protected:
     TransformMatrix4x4 m_transform;

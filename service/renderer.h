@@ -13,10 +13,7 @@ enum Style{
 class Renderer
 {
 public:
-
-    void Draw(Entity* e,Style s);
-
-
+    static void Draw(Entity* e);
 };
 
 #endif // RENDERER_H
