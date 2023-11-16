@@ -3,12 +3,9 @@
 #include "../service/settings.h"
 #include "../service/Scene/entity.h"
 class ControlNode{
-
 // class fileReader;
-
-
-    
-
+   void initModel();
+   void initLightSource();
 
 };
 #endif

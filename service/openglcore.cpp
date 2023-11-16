@@ -47,45 +47,22 @@ void OpenGLCore::initShaders(){
     glDeleteShader(fragmentShader);
 }
 
-void OpenGLCore::initModel(QString path)
-{
-    makeCurrent();
-    cleanUp();
-
-//    glGenVertexArrays(1, &VAO);
-//    glGenBuffers(1, &VBO);
-//    glGenBuffers(1, &EBO);
-//    glBindVertexArray(VAO);
-//    glBindBuffer(GL_ARRAY_BUFFER, VBO);
-//    glBufferData(GL_ARRAY_BUFFER, model->vertex_array.vertex_length*sizeof(vertex_t), model->vertex_array.vertex, GL_STATIC_DRAW);
-
-//    glBindBuffer(GL_ELEMENT_ARRAY_BUFFER, EBO);
-//    glBufferData(GL_ELEMENT_ARRAY_BUFFER, model->index_array.facet_length*4, model->index_array.facet, GL_STATIC_DRAW);
-
-//    glEnableVertexAttribArray(0);
-//    glVertexAttribPointer(0, 3, GL_FLOAT, GL_FALSE, 3 * sizeof(float), (void*)0);
-//    glBindBuffer(GL_ARRAY_BUFFER, 0);
-
-//    glBindVertexArray(0);
-    doneCurrent();
-}
 
 void OpenGLCore::drawPoints(){
 
     glPolygonMode(GL_FRONT_AND_BACK, GL_POINT);
-    if(settings->type_vertex==circle){
+    if(Settings::getSettings().getVertexType()==circle){
         glEnable(GL_POINT_SMOOTH);
     }else{
         glEnable(GL_POINT_SPRITE);
     }
     unsigned int colorLoc = glGetUniformLocation(shaderProgram, "color");
-    glUniform3f(colorLoc, (float)settings->color_vertex[0]/255.f,
-                (float)settings->color_vertex[1]/255.f,(float)settings->color_vertex[2]/255.f);
-    glBindVertexArray(VAO);
-    glPointSize(settings->size_vertex);
-    glDrawElements(GL_POINTS, model->index_array.facet_length,GL_UNSIGNED_INT,(void*)0);
-    glBindVertexArray(0);
-    if(settings->type_vertex==circle){
+    Vec3 vertex_color= Settings::getSettings().getVertexColor();
+    glUniform3f(colorLoc, vertex_color.x,
+                vertex_color.y,vertex_color.z);
+    glPointSize(Settings::getSettings().getVertexSize());
+    scene->Draw();
+    if(Settings::getSettings().getVertexType()==circle){
         glDisable(GL_POINT_SMOOTH);
     }else{
         glDisable(GL_POINT_SPRITE);
@@ -93,23 +70,24 @@ void OpenGLCore::drawPoints(){
 }
 void OpenGLCore::paintGL()
 {
-    glClearColor((float)settings->color_background[0]/255.f
-                 ,(float)settings->color_background[1]/255.f
-                 ,(float)settings->color_background[2]/255.f, 1.f);
+    Vec3 bg_color= Settings::getSettings().getBackgroundColor();
+    glClearColor(bg_color.x,bg_color.y,bg_color.z, 1.f);
+
     glClear(GL_COLOR_BUFFER_BIT | GL_DEPTH_BUFFER_BIT);
-    if (this->VAO!=0)
+    if (this->scene!=nullptr)
     {
         glEnable(GL_DEPTH_TEST);
         glUseProgram(shaderProgram);
-        transforming();
         unsigned int transformLoc = glGetUniformLocation(shaderProgram, "transform");
-        glUniformMatrix4fv(transformLoc, 1, GL_FALSE, transform.data());
-        transformLoc = glGetUniformLocation(shaderProgram,"projection");
-        glUniformMatrix4fv(transformLoc, 1, GL_FALSE, projection.data());
-        transformLoc = glGetUniformLocation(shaderProgram,"view");
-        glUniformMatrix4fv(transformLoc, 1, GL_FALSE, camera.data());
+        ///////AAALEEERT//////
 
-        if(settings->type_vertex!=none){
+        glUniformMatrix4fv(transformLoc, 1, GL_FALSE, nullptr);
+        transformLoc = glGetUniformLocation(shaderProgram,"projection");
+        glUniformMatrix4fv(transformLoc, 1, GL_FALSE,nullptr);
+        transformLoc = glGetUniformLocation(shaderProgram,"view");
+        glUniformMatrix4fv(transformLoc, 1, GL_FALSE, nullptr);
+
+        if(Settings::getSettings().getVertexType()!=none){
             drawPoints();
         }
         drawLines();
@@ -124,30 +102,27 @@ void OpenGLCore::resizeGL(int w, int h)
 void OpenGLCore::initializeGL()
 {
     initializeOpenGLFunctions();
-    glClearColor((float)settings->color_background[0]/255.f
-                 ,(float)settings->color_background[1]/255.f
-                 ,(float)settings->color_background[2]/255.f, 1.f);
+    Vec3 bg_color= Settings::getSettings().getBackgroundColor();
+    glClearColor(bg_color.x,bg_color.y,bg_color.z, 1.f);
     glEnable(GL_DEPTH_TEST);
     glEnable(GL_CULL_FACE);
-
     initShaders();
 }
 
 void OpenGLCore::drawLines(){
     glPolygonMode(GL_FRONT_AND_BACK, GL_LINE);
-    if(settings->type_line==dotted){
+    if(Settings::getSettings().getLineType()==dotted){
         glEnable(GL_LINE_STIPPLE);
         glLineStipple(2,0x00ff);
     }
 
-    glLineWidth(settings->size_line);
+    glLineWidth(Settings::getSettings().getLineSize());
     unsigned int colorLoc = glGetUniformLocation(shaderProgram, "color");
-    glUniform3f(colorLoc, (float)settings->color_line[0]/255.f,
-                (float)settings->color_line[1]/255.f,(float)settings->color_line[2]/255.f);
-    glBindVertexArray(VAO);
-    glDrawElements(GL_TRIANGLES, model->index_array.facet_length,GL_UNSIGNED_INT,(void*)0);
-    glBindVertexArray(0);
-    if(settings->type_line==dotted){
+    Vec3 line_color= Settings::getSettings().getVertexColor();
+    glUniform3f(colorLoc, line_color.x,
+                line_color.y,line_color.z);
+    scene->Draw();
+    if(Settings::getSettings().getLineType()==dotted){
         glDisable(GL_LINE_STIPPLE);
     }
 }

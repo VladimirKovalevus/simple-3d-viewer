@@ -11,6 +11,7 @@ class Entity
 public:
     virtual void Draw();
     virtual void addChildren(Entity* e);
+    virtual void removeChildren(int pos);
 
 protected:
     TransformMatrix4x4 m_transform;

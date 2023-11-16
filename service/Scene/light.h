@@ -9,12 +9,19 @@ struct Color{
 };
 
 
-class Light: public Entity
+class Light
 {
 public:
-    Light();
-protected:
-    Color color;
+    Light(Color color={1,1,1},Vec3 _dir={0,1,0});
+
+    void setDirection(Vec3 dir);
+    void setColor(Color color);
+    Vec3 getDirection()const;
+    Color getColor()const;
+
+private:
+    Vec3 _dir;
+    Color _color;
 };
 
 #endif // LIGHT_H
