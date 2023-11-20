@@ -1007,7 +1007,7 @@ font: 700 13pt &quot;PT Mono&quot;;
      </layout>
     </widget>
    </widget>
-   <widget class="OpenGlCore" name="openGLWidget">
+   <widget class="OpenGLCore" name="openGLWidget">
     <property name="geometry">
      <rect>
       <x>350</x>
@@ -1021,9 +1021,9 @@ font: 700 13pt &quot;PT Mono&quot;;
  </widget>
  <customwidgets>
   <customwidget>
-   <class>OpenGlCore</class>
+   <class>OpenGLCore</class>
    <extends>QOpenGLWidget</extends>
-   <header>service/openglcore.h</header>
+   <header>openglcore.h</header>
   </customwidget>
  </customwidgets>
  <resources/>

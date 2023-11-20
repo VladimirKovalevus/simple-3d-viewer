@@ -8,21 +8,16 @@ set(CMAKE_AUTORCC ON)
 
 set(CMAKE_CXX_STANDARD 17)
 set(CMAKE_CXX_STANDARD_REQUIRED ON)
+include_directories(${CMAKE_CURRENT_SOURCE_DIR}/service)
 
 find_package(QT NAMES Qt6 Qt5 REQUIRED COMPONENTS Widgets)
-find_package(Qt${QT_VERSION_MAJOR} REQUIRED COMPONENTS Widgets)
+find_package(Qt${QT_VERSION_MAJOR} REQUIRED COMPONENTS Widgets OpenGL)
 
 set(PROJECT_SOURCES
         main.cpp
         view/mainwindow.cpp
         view/mainwindow.h
         mainwindow.ui
-)
-
-if(${QT_VERSION_MAJOR} GREATER_EQUAL 6)
-    qt_add_executable(simple-3d-viewer
-        MANUAL_FINALIZATION
-        ${PROJECT_SOURCES}
         service/openglcore.h service/openglcore.cpp
         service/transformmatrix4x4.h service/transformmatrix4x4.cpp
         service/matrix/matrix.cpp service/matrix/matrix.hpp
@@ -32,6 +27,13 @@ if(${QT_VERSION_MAJOR} GREATER_EQUAL 6)
         service/Scene/entity.h service/Scene/entity.cpp
         service/Scene/light.h service/Scene/light.cpp
         service/entityfactory.h service/entityfactory.cpp
+)
+
+if(${QT_VERSION_MAJOR} GREATER_EQUAL 6)
+    qt_add_executable(simple-3d-viewer
+        MANUAL_FINALIZATION
+        ${PROJECT_SOURCES}
+        
     )
 # Define target properties for Android with Qt 6 as:
 #    set_property(TARGET simple-3d-viewer APPEND PROPERTY QT_ANDROID_PACKAGE_SOURCE_DIR
@@ -51,7 +53,7 @@ else()
     endif()
 endif()
 
-target_link_libraries(simple-3d-viewer PRIVATE Qt${QT_VERSION_MAJOR}::Widgets)
+target_link_libraries(simple-3d-viewer PRIVATE Qt${QT_VERSION_MAJOR}::Widgets Qt${QT_VERSION_MAJOR}::OpenGL)
 
 # Qt for iOS sets MACOSX_BUNDLE_GUI_IDENTIFIER automatically since Qt 6.1.
 # If you are developing for iOS or macOS you should consider setting an

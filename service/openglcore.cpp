@@ -110,12 +110,12 @@ void OpenGLCore::initializeGL()
 }
 
 void OpenGLCore::drawLines(){
+
     glPolygonMode(GL_FRONT_AND_BACK, GL_LINE);
     if(Settings::getSettings().getLineType()==dotted){
         glEnable(GL_LINE_STIPPLE);
         glLineStipple(2,0x00ff);
     }
-
     glLineWidth(Settings::getSettings().getLineSize());
     unsigned int colorLoc = glGetUniformLocation(shaderProgram, "color");
     Vec3 line_color= Settings::getSettings().getVertexColor();

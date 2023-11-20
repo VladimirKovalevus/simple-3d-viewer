@@ -5,8 +5,8 @@
 #include <QtOpenGLWidgets/QOpenGLWidget>
 #include <QtOpenGL/QOpenGLFunctions_3_3_Core>
 #include "Scene/entity.h"
-
-class OpenGLCore : public QOpenGLWidget, protected QOpenGLFunctions_3_3_Core
+#include "../controller/observer.hpp"
+class OpenGLCore : public QOpenGLWidget, protected QOpenGLFunctions_3_3_Core,public Observable
 {
     Q_OBJECT
 public:
